@@ -1,2 +1,5 @@
 flake8
 Django
+psycopg2
+djangorestframework
+Markdown
