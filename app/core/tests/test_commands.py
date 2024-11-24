@@ -21,8 +21,9 @@ class CommandTests(SimpleTestCase):
 
     @patch('time.sleep', return_value=None)
     def test_wait_for_db_delay(self, patched_sleep, patched_check):
-        """Test waiting for database when it raises OperationalError at first."""
-        # Mock check to raise OperationalError the first two times, then succeed
+        """Test waiting for database when it raises OperationalError at first.
+        """
+        # Mock check to raise OperationalError the first two times,then succeed
         patched_check.side_effect = [OperationalError, OperationalError, True]
 
         # Call the command
