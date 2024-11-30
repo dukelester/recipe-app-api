@@ -8,9 +8,14 @@ from django.contrib.auth.models import (
 
 class UserManager(BaseUserManager):
     """" The Base user manager """
-    def create_user(self, email, password, **extra_fields):
+    def create_user(self, email, password, phone_number, **extra_fields):
         """ Create the user and return """
-        user = self.model(email=email, **extra_fields)
+        if not email:
+            raise ValueError('New User Must Have a valid Email Address')
+        if email is None:
+            raise ValueError('Email cannot be None')
+        user = self.model(email=self.normalize_email(email),
+                          phone_number=phone_number, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
