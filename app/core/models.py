@@ -23,6 +23,26 @@ class UserManager(BaseUserManager):
 
         return user
 
+    def create_superuser(self, email, password, phone_number):
+        """Create a superuser account.
+
+        This method is responsible for creating a superuser with elevated
+        privileges in the application. It ensures that the superuser
+        has the necessary attributes
+        and permissions to manage the application effectively.
+
+        Args:
+            self: The instance of the class.
+
+        Returns:
+            User: The created superuser instance.
+        """
+        user = self.create_user(email, password, phone_number)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     """ User in the system """
