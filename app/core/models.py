@@ -14,6 +14,8 @@ class UserManager(BaseUserManager):
             raise ValueError('New User Must Have a valid Email Address')
         if email is None:
             raise ValueError('Email cannot be None')
+        if not phone_number:
+            raise ValueError('A valid phone number is needed')
         user = self.model(email=self.normalize_email(email),
                           phone_number=phone_number, **extra_fields)
         user.set_password(password)

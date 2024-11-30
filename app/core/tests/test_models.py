@@ -40,3 +40,17 @@ class ModelTests(TestCase):
             get_user_model().objects.create_user(
                 '', 'test123',
                 phone_number=f'07239087{random.randrange(2, 100)}',)
+
+    def test_new_user_without_phone_raises_error(self):
+        ''' Test for a user creation without a phone number '''
+        with self.assertRaises(TypeError):
+            get_user_model().objects.create_user(
+                'hello@example.com', 'hello200',
+            )
+
+    def test_new_user_with_empty_phone_raises_error(self):
+        ''' Test for a user creation without a phone number '''
+        with self.assertRaises(ValueError):
+            get_user_model().objects.create_user(
+                'hello@example.com', 'hello200', '',
+            )
