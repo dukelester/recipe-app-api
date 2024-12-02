@@ -3,3 +3,4 @@ Django
 psycopg2
 djangorestframework
 Markdown
+drf-spectacular
