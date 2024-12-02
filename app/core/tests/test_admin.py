@@ -30,3 +30,10 @@ class AminSiteTests(TestCase):
         self.assertContains(res, self.user.email)
         self.assertContains(res, self.user.phone_number)
         self.assertContains(res, self.user.name)
+
+    def test_edit_user_page(self):
+        ''' Test the edit user page works'''
+        url = reverse('admin:core_user_change', args=[self.user.id])
+        res = self.client.get(url)
+
+        self.assertEqual(res.status_code, 200)
