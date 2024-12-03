@@ -99,7 +99,7 @@ class PrivateRecipeAPITests(TestCase):
     def test_creating_recipe(self):
         ''' Test creating a recipe and storing to the database'''
         payload = {
-            'title': ' Sample recipe 2 Title',
+            'title': 'Sample recipe 2 Title',
             'time_in_minutes': 30,
             'price': Decimal('20.97'),
             'description': 'Sample Recipe 2 description here',
