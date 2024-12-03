@@ -1,6 +1,7 @@
 
 ''' Database models '''
 from django.db import models
+
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
@@ -56,3 +57,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone_number',]
+
+
+class Recipe(models.Model):
+    ''' The recipe model '''
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    time_in_minutes = models.IntegerField()
+    price = models.DecimalField(decimal_places=2, max_digits=10)
+    link = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.title
