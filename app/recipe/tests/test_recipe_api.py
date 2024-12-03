@@ -33,6 +33,11 @@ def create_recipe(user, **params):
     return Recipe.objects.create(user=user, **defaults)
 
 
+def create_user(**params):
+    ''' Create a user and return the new user '''
+    return get_user_model().objects.create_user(**params)
+
+
 class PublicRecipeAPITests(TestCase):
     ''' Test unauthenticated API Requests '''
     def setUp(self):
