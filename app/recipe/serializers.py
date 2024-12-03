@@ -16,3 +16,20 @@ class RecipeSerializer(serializers.ModelSerializer):
             'price', 'link', 'description',
                 ]
         read_only_fields = ['id']
+
+
+class RecipeDetailSerializer(RecipeSerializer):
+    ''' The recipe details serializer '''
+    class Meta(RecipeSerializer.Meta):
+        class Meta(RecipeSerializer.Meta):
+            """Meta class for the RecipeSerializer.
+
+            This class inherits from the Meta class of RecipeSerializer
+            and specifies the fields to be included in the serialized output.
+            same fields are used consistently across different serializers.
+
+            Attributes:
+                fields (tuple): The fields to be included in the
+                serialized output.
+            """
+            fields = RecipeSerializer.Meta.fields
