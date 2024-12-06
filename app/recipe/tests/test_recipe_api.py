@@ -163,3 +163,38 @@ class PrivateRecipeAPITests(TestCase):
         for key, value in payload.items():
             self.assertEqual(getattr(recipe, key), value)
         self.assertEqual(recipe.user, self.user)
+
+    def test_create_recipe_with_tags(self):
+        ''' Test Creating a recipe with tags '''
+        payload = create_recipe(
+            user=self.user,
+            title='Thai Welcome Mutgets',
+            time_in_minutes=45,
+            price=Decimal('120.97'),
+            description='A recipe in Thailand',
+            tags=[{'name': 'Thai', 'name': 'Dinner'}]
+        )
+        res = self.client.post(RECIPE_URL, payload, format='json')
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        recipes = Recipe.objects.all()
+        self.assertEqual(recipes.count(), 1)
+        recipe = recipes[0]
+        self.assertEqual(recipe.tags.count(), 2)
+
+    def test_create_recipe_with_existing_tag(self):
+        ''' Test creating a recipe with existing tag'''
+        tag_indian = Tag.objects.create(user=self.user, name='Indian')
+        payload = {
+            'title': 'Sample recipe Updated',
+            'time_in_minutes': 30,
+            'price': Decimal('320.97'),
+            'description': 'Sample Recipe 5 description here',
+            'tags': [{'name': 'Indian'}, {'name': 'Breakfast'}],
+        }
+        res = self.client.post(RECIPE_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        recipes = Recipe.objects.filter(user=self.user)
+        self.assertEqual(recipes.count(), 1)
+        recipe = recipes[0]
+        self.assertEqual(recipe.tags.count(), 2)
+        self.assertIn(tag_indian, recipe.tags.all())
