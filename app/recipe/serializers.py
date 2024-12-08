@@ -4,7 +4,7 @@ Serializers for the APIS
 
 from rest_framework import serializers
 
-from core.models import Recipe, Tag
+from core.models import Recipe, Tag, Ingredient
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -16,15 +16,25 @@ class TagSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 
+class IngredientSerializer(serializers.ModelSerializer):
+    ''' The Ingredient serializer '''
+    class Meta:
+        ''' Serializer for Ingredients '''
+        model = Ingredient
+        fields = ['id', 'name']
+        read_only_fields = ['id']
+
+
 class RecipeSerializer(serializers.ModelSerializer):
     ''' Serializer for the Recipe '''
     tags = TagSerializer(many=True, required=False)
+    ingredients = IngredientSerializer(many=True, required=False)
 
     class Meta:
         model = Recipe
         fields = [
             'id', 'title', 'time_in_minutes',
-            'price', 'link', 'description', 'tags',
+            'price', 'link', 'description', 'tags', 'ingredients',
                 ]
         read_only_fields = ['id']
 
