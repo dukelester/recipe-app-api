@@ -68,6 +68,7 @@ class Recipe(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=10)
     link = models.CharField(max_length=255)
     tags = models.ManyToManyField('Tag')
+    ingredients = models.ManyToManyField('Ingredient')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -83,4 +84,15 @@ class Tag(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
+        return self.name
+
+
+class Ingredient(models.Model):
+    ''' The Ingredient Model '''
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
         return self.name
