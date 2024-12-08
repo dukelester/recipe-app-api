@@ -39,6 +39,25 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(models.User, UserAdmin)
 
-admin.site.register(models.Recipe)
+
+class RecipeDisplay(admin.ModelAdmin):
+    """ Define the admin pages for Recipe """
+    ordering = ['id']
+    list_display = [
+        'user', 'title', 'description', 'time_in_minutes',
+        'price', 'get_tags', 'get_ingredients']
+
+    def get_tags(self, obj):
+        ''' The tags '''
+        return ", ".join([tag.name for tag in obj.tags.all()])
+    get_tags.short_description = 'Tags'
+
+    def get_ingredients(self, obj):
+        ''' The ingredients '''
+        return "".join([ingredient.name for ingredient in obj.ingredients.all()])
+    get_ingredients.short_description = 'Ingredients'
+
+
+admin.site.register(models.Recipe, RecipeDisplay)
 admin.site.register(models.Tag)
 admin.site.register(models.Ingredient)
