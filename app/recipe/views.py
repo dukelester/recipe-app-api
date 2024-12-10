@@ -27,6 +27,22 @@ class BaseRecipeAttrViewSet(
         return self.queryset.filter(user=self.request.user).order_by('-name')
 
 
+@extend_schema_view(
+    list=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                'tags',
+                OpenApiTypes.STR,
+                description='Comma separated list of IDs to filter',
+            ),
+            OpenApiParameter(
+                'ingredients',
+                OpenApiTypes.STR,
+                description='Comma separated list of IDs to filter',
+            ),
+        ]
+    )
+)
 class RecipeViewSet(viewsets.ModelViewSet):
     """ViewSet for managing recipes.
 
