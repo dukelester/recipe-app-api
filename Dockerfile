@@ -33,6 +33,7 @@ COPY ./app /app
 WORKDIR /app
 EXPOSE 8000
 
+ENV PATH="/scripts:/py/bin:$PATH"
 USER dukelester
 
 CMD [ "run.sh" ]
