@@ -50,7 +50,6 @@ class RecipeSerializer(serializers.ModelSerializer):
     def _get_or_create_ingredient(self, ingredients, recipe):
         ''' Create the ingredients and add to recipe '''
         auth_user = self.context['request'].user
-        print(self.context)
         for ingredient in ingredients:
             ingredient_obj, create = Ingredient.objects.get_or_create(
                 user=auth_user,

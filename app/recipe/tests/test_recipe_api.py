@@ -1,6 +1,10 @@
 ''' Test for Recipe APIS '''
 
 from decimal import Decimal
+import tempfile
+import os
+
+from PIL import Image
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -19,6 +23,11 @@ RECIPE_URL = reverse('recipe:recipe-list')
 def detail_url(recipe_id):
     ''' Return the url to the recipe '''
     return reverse('recipe:recipe-detail', args=[recipe_id])
+
+
+def image_upload_url(recipe_id):
+    ''' Return image upload url for a recipe '''
+    return reverse('recipe:recipe-upload-image', args=[recipe_id])
 
 
 def create_recipe(user, **params):
@@ -221,3 +230,35 @@ class PrivateRecipeAPITests(TestCase):
         # # Check that the new tag is created
         # tag_breakfast = Tag.objects.get(user=self.user, name='Breakfast')
         # self.assertIn(tag_breakfast, recipe.tags.all())
+
+
+class ImageUploadTests(TestCase):
+    ''' Tests for the image upload '''
+    def setUp(self):
+        self.client = APIClient()
+        self.user = create_user(
+            email='recipetest9@gmail.com',
+            password='recipes190202',
+            phone_number='0970230012',
+            name='Moger Kiamb'
+        )
+        self.client.force_authenticate(self.user)
+        self.recipe = create_recipe(user=self.user)
+
+    def tearDown(self):
+        self.recipe.image.delete()
+
+    def test_upload_image(self):
+        ''' Test uploading the image '''
+        url = image_upload_url(self.recipe.id)
+        with tempfile.NamedTemporaryFile(suffix='.jpg') as image_file:
+            image = Image.new('RGB', (10, 10))
+            image.save(image_file, format='JPEG')
+            image_file.seek(0)
+            payload = {'image': image_file}
+            res = self.client.post(url, payload, format='multipart')
+
+            self.recipe.refresh_from_db()
+            self.assertEqual(res.status_code, status.HTTP_200_OK)
+            self.assertIn('image', res.data)
+            self.assertTrue(os.path.exists(self.recipe.image.path))
