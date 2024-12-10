@@ -53,7 +53,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ''' Create a new recipe'''
         serializer.save(user=self.request.user)
 
-    @action(method=['POST'], detail=True, url_path='upload_image')
+    @action(methods=['POST'], detail=True, url_path='upload_image')
     def upload_image(self, request, pk=None):
         ''' Upload the image to recipe '''
         recipe = self.get_object()
