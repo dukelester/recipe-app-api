@@ -20,7 +20,11 @@ RUN pip install --upgrade pip && \
     adduser \
         --disabled-password \
         --no-create-home \
-        dukelester
+        dukelester && \
+    mkdir -p /vol/web/media && \
+    mkdir -p /vol/web/static && \
+    chown -R dukelester:dukelester /vol && \
+    chmod -R 755 /vol
 
 
 COPY ./app /app
