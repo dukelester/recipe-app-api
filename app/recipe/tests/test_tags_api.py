@@ -110,8 +110,8 @@ class PrivateTagsAPITests(TestCase):
         recipe.tags.add(tag1)
         res = self.client.get(TAGS_URL, {'assigned_only': 1})
 
-        s1 = IngredientSerializer(tag1)
-        s2 = IngredientSerializer(tag2)
+        s1 = TagSerializer(tag1)
+        s2 = TagSerializer(tag2)
         self.assertIn(s1.data, res.data)
         self.assertNotIn(s2.data, res.data)
 
