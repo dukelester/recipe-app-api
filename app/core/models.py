@@ -1,10 +1,20 @@
 
 ''' Database models '''
+import uuid
+import os
+
 from django.db import models
 
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
+
+
+def recipe_image_file_path(instance, file_name):
+    ''' Generate file path for recipe image  '''
+    ext = os.path.splitext(file_name)[1]
+    file_name = f'{uuid.uuid4()}{ext}'
+    return os.path.join('uploads', 'recipe', file_name)
 
 
 class UserManager(BaseUserManager):
