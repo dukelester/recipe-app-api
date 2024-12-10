@@ -54,7 +54,7 @@ class RecipeDisplay(admin.ModelAdmin):
 
     def get_ingredients(self, obj):
         ''' The ingredients '''
-        return "".join([ingredient.name for ingredient in obj.ingredients.all()])
+        return ", ".join([ingredient.name for ingredient in obj.ingredients.all()])
     get_ingredients.short_description = 'Ingredients'
 
 

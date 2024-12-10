@@ -42,24 +42,42 @@ class RecipeSerializer(serializers.ModelSerializer):
         ''' Create or get a tag'''
         auth_user = self.context['request'].user
         for tag in tags:
-            tag_object, created = Tag.objects.get_or_create(
+            tag_object, create = Tag.objects.get_or_create(
                 user=auth_user,**tag
             )
             recipe.tags.add(tag_object)
 
+    def _get_or_create_ingredient(self, ingredients, recipe):
+        ''' Create the ingredients and add to recipe '''
+        auth_user = self.context['request'].user
+        print(self.context)
+        for ingredient in ingredients:
+            ingredient_obj, create = Ingredient.objects.get_or_create(
+                user=auth_user,
+                **ingredient
+            )
+            recipe.ingredients.add(ingredient_obj)
+
     def create(self, validated_data):
         ''' Create a recipe '''
         tags_data = validated_data.pop('tags', [])
+        ingredients_data = validated_data.pop('ingredients', [])
         recipe = Recipe.objects.create(**validated_data)
         self._get_or_create_tag(tags_data, recipe)
+        self._get_or_create_ingredient(ingredients_data, recipe)
         return recipe
 
     def update(self, instance, validated_data):
         ''' Update the recipe'''
         tags = validated_data.pop('tags', None)
+        ingredients = validated_data.pop('ingredients', None)
         if tags is not None:
             instance.tags.clear()
             self._get_or_create_tag(tags, instance)
+
+        if ingredients is not None:
+            instance.ingredients.clear()
+            self._get_or_create_ingredient(ingredients, instance)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
